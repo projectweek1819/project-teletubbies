@@ -122,10 +122,12 @@ function removeChains(grid) {
 
 function collapse(grid){
     for (let h = 0 ; h < width(grid) ; h++){
-        for (let v = 0 ; v < height(grid) ; v++){
-            if (grid[v][h] === ""){
-                grid[v][h] = grid[v-1][h];
-                grid[v-1][h] = "";
+        for (let v = 0 ; v < height(grid) ; v++) {
+            for (let v = 0; v < height(grid); v++) {
+                if (grid[v][h] === "" && v !== 0) {
+                    grid[v][h] = grid[v - 1][h];
+                    grid[v - 1][h] = "";
+                }
             }
         }
     }
