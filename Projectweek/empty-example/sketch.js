@@ -1,17 +1,26 @@
 let bolletjes = new Array(8);
+let moveDone = false;
 let posFirst = -1;
 let posSecond = -1;
 let score = 0;
 
+var font, fontsize = 40;
+
 function setup() {
-    createCanvas(641, 641);
+    createCanvas(641, 721);
+
+    textSize(fontsize);
+    textAlign(CENTER, CENTER);
+
     createGame();
     removeChains(bolletjes);
     collapse(bolletjes);
+    score = 0;
 }
 
 function draw() {
     background(220);
+    fill(220);
     for (var x = 0; x < width; x += 640 / 8) {
         for (var y = 0; y < height; y += 640 / 8) {
             strokeWeight(1);
@@ -19,6 +28,10 @@ function draw() {
             line(0, y, width, y);
         }
     }
+    rect(0, 640, 640, 80);
+    textAlign(LEFT);
+    drawWords();
+
     drawBolletjes();
     removeChains(bolletjes);
     collapse(bolletjes);
@@ -104,6 +117,7 @@ function mouseReleased() {
 }
 
 function swap(){
+    moveDone = true;
     let horDiff = Math.abs(posFirst.x - posSecond.x);
     let verDiff = Math.abs(posFirst.y - posSecond.y);
     if (horDiff <= 1 && verDiff <= 1 && !(horDiff >= 1 && verDiff >= 1)){
@@ -116,7 +130,6 @@ function swap(){
             bolletjes[posSecond.y][posSecond.x] = hold;
         }
         removeChains(bolletjes);
-        console.log(bolletjes);
     }
     posFirst = -1;
     posSecond = -1;
@@ -220,6 +233,9 @@ function removeChains(grid) {
     }
     for (const { x, y } of positions) {
         grid[y][x] = 0;
+        if (moveDone) {
+            score += 10;
+        }
     }
     return result;
 }
@@ -244,4 +260,9 @@ function checkVertical(){
 
 function checkHorizontal() {
     return  !(horizontalChainAt(bolletjes, posFirst) >=3 || horizontalChainAt(bolletjes, posSecond) >=3);
+}
+
+function drawWords() {
+    fill(0);
+    text(score.toString(), 50, 680);
 }
